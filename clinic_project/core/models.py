@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class PatientIntake(models.Model):
     first_name = models.CharField(max_length=100)
@@ -24,3 +25,13 @@ class SOAPNote(models.Model):
 
     def __str__(self):
         return f"SOAP Note for {self.patient} by {self.physician}"
+
+class ClinicMetrics(models.Model):
+    date = models.DateField(default=timezone.now)
+    total_patients_seen = models.PositiveIntegerField(default=0)
+    avg_wait_time_minutes = models.FloatField(default=0.0)
+    appointments_today = models.PositiveIntegerField(default=0)
+    staff_on_duty = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Metrics for {self.date}"
