@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Physician Dashboard Prototype</title>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav>
+    <a href="/">Home</a> |
+    <a href="/dashboard/">Physician Dashboard</a> |
+    <a href="/patients/">Patient List</a>
+</nav>
+
+<h2>Physician Dashboard</h2>
+
+<!-- Patient Selection -->
+<div>
+    <label for="patientSelect">Select Patient:</label>
+    <select id="patientSelect" name="patient" onchange="this.form.submit()">
+        <option value="">-- Choose a patient --</option>
+        {% for patient in patients %}
+            <option value="{{ patient.id }}" {% if selected_patient and selected_patient.id == patient.id %}selected{% endif %}>
+                {{ patient.first_name }} {{ patient.last_name }} ({{ patient.dob }})
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+{% if selected_patient %}
+    <!-- Patient Info -->
+    <h3>Patient Info</h3>
+    <p>Name: {{ selected_patient.first_name }} {{ selected_patient.last_name }}</p>
+    <p>DOB: {{ selected_patient.dob }}</p>
+    <p>Contact: {{ selected_patient.contact_number }}</p>
+    <p>Symptoms: {{ selected_patient.symptoms }}</p>
+<h3>Patient Dashboard</h3>
+    <p>Total Visits: {{ dashboard_metrics.num_visits }}</p>
+    <p>Most Recent Visit: {% if dashboard_metrics.most_recent_visit %}{{ dashboard_metrics.most_recent_visit|date:"Y-m-d" }}{% else %}N/A{% endif %}</p>
+    <p>Average Days Between Visits: {% if dashboard_metrics.avg_days_between_visits %}{{ dashboard_metrics.avg_days_between_visits|floatformat:1 }}{% else %}N/A{% endif %}</p>
+
+    <!-- Existing SOAP Notes -->
+    <h3>Past SOAP Notes</h3>
+    <ul>
+        {% for note in soap_notes %}
+            <li>
+                <strong>{{ note.created_at|date:"Y-m-d H:i" }}</strong> by {% if note.physician %}{{ note.physician.username }}{% else %}Anonymous{% endif %}<br>
+                <em>Subjective:</em> {{ note.subjective }}<br>
+                <em>Objective:</em> {{ note.objective }}<br>
+                <em>Assessment:</em> {{ note.assessment }}<br>
+                <em>Plan:</em> {{ note.plan }}
+            </li>
+        {% empty %}
+            <li>No previous SOAP notes.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- New SOAP Note Form -->
+    <h3>Create New SOAP Note</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label>Subjective:</label><br>
+            <textarea name="subjective" rows="3" cols="50"></textarea>
+        </div>
+        <div>
+            <label>Objective:</label><br>
+            <textarea name="objective" rows="3" cols="50"></textarea>
+        </div>
+        <div>
+            <label>Assessment:</label><br>
+            <textarea name="assessment" rows="3" cols="50"></textarea>
+        </div>
+        <div>
+            <label>Plan:</label><br>
+            <textarea name="plan" rows="3" cols="50"></textarea>
+        </div>
+        <button type="submit">Save SOAP Note</button>
+    </form>
+{% endif %}
+
+</body>
+</html>
