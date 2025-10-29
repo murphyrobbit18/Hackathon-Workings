@@ -1,16 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Clinic Management Home</title>
+    <meta charset="UTF-8">
+    <title>Clinic Dashboard</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f7f9fc;
+            margin: 2em;
+        }
+        nav {
+            margin-bottom: 2em;
+        }
+        nav a {
+            margin-right: 1em;
+            text-decoration: none;
+            color: #333;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .metrics {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-width: 400px;
+        }
+        .metrics h1 {
+            margin-bottom: 0.5em;
+        }
+        .metrics p {
+            margin: 0.3em 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Clinic Management Portal</h1>
-    <ul>
-        <li><a href="{% url 'patient_intake' %}">Patient Intake Form</a></li>
-        <li><a href="/admin/">Admin Dashboard</a></li>
-        <!-- Future links -->
-        <li><a href="#">Physician Dashboard (coming soon)</a></li>
-        <li><a href="#">Reports (coming soon)</a></li>
-    </ul>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard/">Physician Dashboard</a>
+    </nav>
+
+    <div class="metrics">
+        <h1>Clinic Metrics</h1>
+        {% if metrics %}
+            <p><strong>Date:</strong> {{ metrics.date }}</p>
+            <p><strong>Total Patients Seen:</strong> {{ metrics.total_patients_seen }}</p>
+            <p><strong>Average Wait Time:</strong> {{ metrics.avg_wait_time_minutes }} minutes</p>
+            <p><strong>Appointments Today:</strong> {{ metrics.appointments_today }}</p>
+            <p><strong>Staff on Duty:</strong> {{ metrics.staff_on_duty }}</p>
+        {% else %}
+            <p>No metrics available yet.</p>
+        {% endif %}
+    </div>
 </body>
 </html>
