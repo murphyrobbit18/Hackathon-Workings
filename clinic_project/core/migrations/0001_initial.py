@@ -36,8 +36,35 @@ class Migration(migrations.Migration):
                 ('assessment', models.TextField()),
                 ('plan', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.patientintake')),
+                ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Patient')),
                 ('physician', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Patient',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('first_name', models.CharField(max_length=100)),
+                ('last_name', models.CharField(max_length=100)),
+                ('dob', models.DateField()),
+                ('contact_number', models.CharField(blank=True, max_length=15)),
+                ('symptoms', models.TextField()),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Physician',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('first_name', models.CharField(max_length=100)),
+                ('last_name', models.CharField(max_length=100)),
+                ('role', models.CharField(max_length=100))
+            ],
+        ),
+        migrations.CreateModel(
+            name='Clinic',
+            fields=[
+                ('name', models.CharField(primary_key=True, max_length=100)),
+                ('location', models.TextField()),
             ],
         ),
     ]

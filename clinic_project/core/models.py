@@ -25,6 +25,31 @@ class SOAPNote(models.Model):
 
     def __str__(self):
         return f"SOAP Note for {self.patient} by {self.physician}"
+    
+class Patient(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    dob = models.DateField()
+    contact_number = models.CharField(max_length=15, blank=True)
+    symptoms = models.TextField()
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+class Physician(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}, {self.role}"
+    
+class Clinic(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.TextField()
+
+    def __str__(self):
+        return f"{self.name}"
 
 class ClinicMetrics(models.Model):
     date = models.DateField(default=timezone.now)
